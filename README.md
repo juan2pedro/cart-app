@@ -1,4 +1,7 @@
 # Angular -  CartApp
+![image](https://github.com/user-attachments/assets/87b6d771-9228-45d8-b41c-74f2ab18db0c)
+
+![image](https://github.com/user-attachments/assets/140a7c7e-70bd-402e-8e71-089f2b76c5b9)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
 
