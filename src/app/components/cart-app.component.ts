@@ -6,25 +6,26 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { CartComponent } from './cart/cart.component';
 import { CartItem } from '../models/cartItem';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RouterOutlet } from '@angular/router';
+import { ModalComponent } from './modal/modal.component';
 
 @Component({
   selector: 'cart-app',
   standalone: true,
-  imports: [CatalogComponent, NavbarComponent, RouterOutlet],
+  imports: [CatalogComponent, NavbarComponent, ModalComponent],
   templateUrl: './cart-app.component.html',
 })
 export class CartAppComponent implements OnInit {
   products: Product[] = [];
   items: CartItem[] = [];
-  total: number = 0;
+  //total: number = 0;
+  showCart: boolean = false;
 
   constructor(private service: ProductService) {}
 
   ngOnInit(): void {
     this.products = this.service.findAll();
     this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
-    this.calculateTotal();
+    //this.calculateTotal();
   }
   onAddCart(product: Product): void {
     const hasItem = this.items.find((item) => item.product.id === product.id);
@@ -38,8 +39,8 @@ export class CartAppComponent implements OnInit {
     } else {
       this.items = [...this.items, { product: { ...product }, quantity: 1 }];
     }
-    this.calculateTotal();
-    this.saveSessions();
+    // this.calculateTotal();
+    // this.saveSessions();
   }
 
   onDeleteCart(id: number): void {
@@ -48,17 +49,20 @@ export class CartAppComponent implements OnInit {
       sessionStorage.removeItem('cart');
       sessionStorage.clear();
     }
-    this.calculateTotal();
-    this.saveSessions();
+    // this.calculateTotal();
+    // this.saveSessions();
   }
-  calculateTotal(): void {
-    this.total = this.items.reduce(
-      (accumulator, item) => accumulator + item.quantity * item.product.price,
-      0
-    );
-  }
-  saveSessions(): void {
-    sessionStorage.setItem('cart', JSON.stringify(this.items));
-    sessionStorage.setItem('total', this.total.toString());
+  // calculateTotal(): void {
+  //   this.total = this.items.reduce(
+  //     (accumulator, item) => accumulator + item.quantity * item.product.price,
+  //     0
+  //   );
+  // }
+  // saveSessions(): void {
+  //   sessionStorage.setItem('cart', JSON.stringify(this.items));
+  //   sessionStorage.setItem('total', this.total.toString());
+  // }
+  openCart(): void {
+    this.showCart = !this.showCart;
   }
 }
