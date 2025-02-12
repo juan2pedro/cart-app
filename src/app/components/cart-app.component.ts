@@ -7,6 +7,7 @@ import { CartComponent } from './cart/cart.component';
 import { CartItem } from '../models/cartItem';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
+import { SharingDataService } from '../services/sharing-data.service';
 
 @Component({
   selector: 'cart-app',
@@ -19,12 +20,16 @@ export class CartAppComponent implements OnInit {
   items: CartItem[] = [];
   total: number = 0;
 
-  constructor(private service: ProductService) {}
+  constructor(
+    private service: ProductService,
+    private sharingDataService: SharingDataService
+  ) {}
 
   ngOnInit(): void {
     this.products = this.service.findAll();
     this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
     this.calculateTotal();
+    this.onDeleteCart();
   }
   onAddCart(product: Product): void {
     const hasItem = this.items.find((item) => item.product.id === product.id);
@@ -42,14 +47,16 @@ export class CartAppComponent implements OnInit {
     this.saveSessions();
   }
 
-  onDeleteCart(id: number): void {
-    this.items = this.items.filter((item) => item.product.id !== id);
-    if (this.items.length == 0) {
-      sessionStorage.removeItem('cart');
-      sessionStorage.clear();
-    }
-    this.calculateTotal();
-    this.saveSessions();
+  onDeleteCart(): void {
+    this.sharingDataService.idProductEventEmitter.subscribe((id) => {
+      this.items = this.items.filter((item) => item.product.id !== id);
+      if (this.items.length == 0) {
+        sessionStorage.removeItem('cart');
+        sessionStorage.clear();
+      }
+      this.calculateTotal();
+      this.saveSessions();
+    });
   }
   calculateTotal(): void {
     this.total = this.items.reduce(
