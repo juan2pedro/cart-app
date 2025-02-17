@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { products } from '../../data/product.data';
 import { Product } from '../../models/product';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Route, Router } from '@angular/router';
+import { SharingDataService } from '../../services/sharing-data.service';
 
 @Component({
   selector: 'catalog',
@@ -12,13 +13,16 @@ import { Route, Router } from '@angular/router';
 })
 export class CatalogComponent {
   products!: Product[];
-  productEventEmitter = new EventEmitter();
-  constructor(private router: Router) {
+
+  constructor(
+    private router: Router,
+    private sharingDataService: SharingDataService
+  ) {
     this.products =
       this.router.getCurrentNavigation()?.extras.state!['products'];
   }
 
   onAddCart(product: Product) {
-    this.productEventEmitter.emit(product);
+    this.sharingDataService.productEventEmitter.emit(product);
   }
 }
