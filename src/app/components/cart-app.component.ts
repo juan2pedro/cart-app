@@ -4,7 +4,7 @@ import { CartItem } from '../models/cartItem';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { SharingDataService } from '../services/sharing-data.service';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'cart-app',
   standalone: true,
@@ -45,22 +45,46 @@ export class CartAppComponent implements OnInit {
       this.rotuter.navigate(['/cart'], {
         state: { items: this.items, total: this.total },
       });
+      Swal.fire({
+        title: 'Carrito de compra',
+        text: 'Producto añadido al carrito',
+        icon: 'success',
+      });
     });
   }
 
   onDeleteCart(): void {
     this.sharingDataService.idProductEventEmitter.subscribe((id) => {
-      this.items = this.items.filter((item) => item.product.id !== id);
-      if (this.items.length == 0) {
-        sessionStorage.removeItem('cart');
-        sessionStorage.clear();
-      }
-      this.calculateTotal();
-      this.saveSessions();
-      this.rotuter.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.rotuter.navigate(['/cart'], {
-          state: { items: this.items, total: this.total },
-        });
+      Swal.fire({
+        title: '¿Está seguro de eliminar el producto?',
+        text: 'Cuidado el item se iliminara del carrito!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.items = this.items.filter((item) => item.product.id !== id);
+          if (this.items.length == 0) {
+            sessionStorage.removeItem('cart');
+            sessionStorage.clear();
+          }
+          this.calculateTotal();
+          this.saveSessions();
+          this.rotuter
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.rotuter.navigate(['/cart'], {
+                state: { items: this.items, total: this.total },
+              });
+            });
+          Swal.fire({
+            title: 'Elimidado!',
+            text: 'Item eliminado del carrito de compra.',
+            icon: 'success',
+          });
+        }
       });
     });
   }
