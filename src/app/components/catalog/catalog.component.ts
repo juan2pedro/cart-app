@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ProductService } from './../../services/product.service';
+import { Component, OnInit } from '@angular/core';
 import { products } from '../../data/product.data';
 import { Product } from '../../models/product';
 import { ProductCardComponent } from '../product-card/product-card.component';
@@ -11,15 +12,16 @@ import { SharingDataService } from '../../services/sharing-data.service';
   imports: [ProductCardComponent],
   templateUrl: './catalog.component.html',
 })
-export class CatalogComponent {
+export class CatalogComponent implements OnInit {
   products!: Product[];
 
   constructor(
+    private productService: ProductService,
     private router: Router,
     private sharingDataService: SharingDataService
-  ) {
-    this.products =
-      this.router.getCurrentNavigation()?.extras.state!['products'];
+  ) {}
+  ngOnInit(): void {
+    this.products = this.productService.findAll();
   }
 
   onAddCart(product: Product) {
