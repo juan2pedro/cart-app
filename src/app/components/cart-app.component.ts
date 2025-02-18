@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
-import { products } from '../data/product.data';
 import { Product } from '../models/product';
-import { CatalogComponent } from './catalog/catalog.component';
-import { CartComponent } from './cart/cart.component';
 import { CartItem } from '../models/cartItem';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SharingDataService } from '../services/sharing-data.service';
 
 @Component({
   selector: 'cart-app',
   standalone: true,
-  imports: [CatalogComponent, NavbarComponent, RouterOutlet],
+  imports: [NavbarComponent, RouterOutlet],
   templateUrl: './cart-app.component.html',
 })
 export class CartAppComponent implements OnInit {
@@ -22,7 +19,8 @@ export class CartAppComponent implements OnInit {
 
   constructor(
     private service: ProductService,
-    private sharingDataService: SharingDataService
+    private sharingDataService: SharingDataService,
+    private rotuter: Router
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +45,9 @@ export class CartAppComponent implements OnInit {
       }
       this.calculateTotal();
       this.saveSessions();
+      this.rotuter.navigate(['/cart'], {
+        state: { items: this.items, total: this.total },
+      });
     });
   }
 
@@ -59,6 +60,11 @@ export class CartAppComponent implements OnInit {
       }
       this.calculateTotal();
       this.saveSessions();
+      this.rotuter.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.rotuter.navigate(['/cart'], {
+          state: { items: this.items, total: this.total },
+        });
+      });
     });
   }
   calculateTotal(): void {
