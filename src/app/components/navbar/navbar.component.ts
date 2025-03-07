@@ -6,12 +6,10 @@ import { Product } from '../../models/product';
 
 @Component({
   selector: 'navbar',
-  standalone: true,
   imports: [RouterModule],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
   @Input() items: CartItem[] = [];
-  @Input() total: number = 0;
   @Input() products: Product[] = [];
 }
