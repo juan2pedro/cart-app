@@ -3,6 +3,11 @@
 
 ![image](https://github.com/user-attachments/assets/140a7c7e-70bd-402e-8e71-089f2b76c5b9)
 
+# Rama con rutas y sweetAlert2
+![image](https://github.com/user-attachments/assets/7d9af4c8-6fed-445e-b178-e84ed80ed94c)
+![image](https://github.com/user-attachments/assets/06f899e5-e7dc-48d7-b77f-9ff21e2c8b84)
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
 
 ## Development server
